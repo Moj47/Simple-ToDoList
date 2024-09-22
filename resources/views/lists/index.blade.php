@@ -116,11 +116,14 @@
                     <h4>{{ $list->name }}</h4>
                     <p>{{ $list->description }}</p>
                 </a>
+                @can('delete-list',$list)
+
                 <form action="{{ route('lists.destroy', $list) }}" method="post">
                     @csrf
                     @method('DELETE')
                     <button style="margin-left: 95%" class="btn btn-danger">Delete</button>
                 </form>
+                @endcan
             </li>
         @endforeach
 

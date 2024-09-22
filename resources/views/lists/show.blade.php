@@ -128,6 +128,8 @@
         <ul id="myUL" class="list-group">
             @foreach ($list->task as $task)
                 <li class="list-group-item">
+                    @can('update-task',$task)
+
                     <form style="display:inline" action="{{ route('tasks.update', $task) }}" method="POST">
                         @method('put')
                         @csrf
@@ -136,11 +138,15 @@
                         <span>{{ $task->title }}</span>
                         <small style='margin-left: 40%'>{{ $task->description }}</small>
                     </form>
+                    @endcan
+                    @can('delete-task',$task)
+
                     <form style="display:inline " action="{{ route('tasks.destroy', $task) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button style="margin-left:95%" class="btn btn-danger">Delete</button>
                     </form>
+                    @endcan
                 </li>
             @endforeach
         </ul>

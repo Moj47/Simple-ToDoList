@@ -35,6 +35,8 @@ class ListController extends Controller
     }
     public function delete(ToDoList $toDoList)
     {
+        $this->authorize('delete-list',$toDoList);
+
         $toDoList->delete();
         return back();
     }

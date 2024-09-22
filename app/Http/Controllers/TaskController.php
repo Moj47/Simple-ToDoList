@@ -65,6 +65,7 @@ class TaskController extends Controller
      */
     public function update(Task $task)
     {
+        $this->authorize('update-task',$task);
         if($task->check==true)
             $task->update(['check'=>false]);
         else
@@ -77,6 +78,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete-task',$task);
         $task->delete();
         return back();
     }

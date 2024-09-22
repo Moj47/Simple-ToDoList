@@ -95,14 +95,53 @@
     <div class="container">
         <div class="header">
             <h2>{{ $list->name }}</h2>
-            <input type="text" id="myInput" placeholder="Title..." class="form-control">
-            <button onclick="newElement()" class="btn btn-orange">Add</button><br>
+            <form method="post" action="{{route('tasks.store')}}">
+                <input type="hidden" name="list_id" value="{{ $list->id }}">
+
+                @csrf
+            <div class="row">
+                <div class="col-md-6">
+                    <input style="width: 90%"  name='title' type="text" id="myInput" placeholder="Title..." class=" @error('title') is-invalid @enderror form-control">
+                    @error('title')
+
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-md-6">
+                    <input style="width: 90%"  name='description' type="text" id="myInput" placeholder="Description..." class=" @error('description') is-invalid @enderror form-control">
+                    @error('description')
+
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-md-12">
+                    <button onclick="" class="btn btn-orange">Add</button><br>
+                </div>
+            </div>
+        </form>
         </div>
 
         <ul id="myUL" class="list-group">
-            <li class="list-group-item">
-                <input type="checkbox" aria-label="...">
-                <span>Hit the gym</span>
-            </li>
+            @foreach ($list->task as $task)
+                <li class="list-group-item">
+                    <form style="display:inline" action="{{ route('tasks.update', $task) }}" method="POST">
+                        @method('put')
+                        @csrf
+                        <input {{ $task->check == true ? 'checked' : '' }} onchange="this.form.submit()" type="checkbox"
+                        aria-label="...">
+                        <span>{{ $task->title }}</span>
+                        <small style='margin-left: 40%'>{{ $task->description }}</small>
+                    </form>
+                    <form style="display:inline " action="{{ route('tasks.destroy', $task) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button style="margin-left:95%" class="btn btn-danger">Delete</button>
+                    </form>
+                </li>
+            @endforeach
         </ul>
     @endsection

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware'=>'auth'],function(){
@@ -13,6 +14,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('create-list',[ListController::class,'create'])->name('lists.create');
     Route::post('lists',[ListController::class,'store'])->name('lists.store');
     Route::delete('list/{toDoList}',[ListController::class,'delete'])->name('lists.destroy');
+    Route::resource('tasks',TaskController::class);
 });
 
 Auth::routes();

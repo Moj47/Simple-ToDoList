@@ -24,7 +24,7 @@ class ListController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|min:4|max:25',
+            'name' => 'required|string|min:3|max:25',
             'description' => 'required|string|max:250'
         ]);
         $user_id = auth()->user()->id;

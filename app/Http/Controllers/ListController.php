@@ -9,12 +9,28 @@ class ListController extends Controller
 {
     public function index()
     {
-        $lists=ToDoList::where('user_id',auth()->user()->id)->get();
+        $lists = ToDoList::where('user_id', auth()->user()->id)->get();
         return view('lists.index')
-        ->with('lists',$lists);
+            ->with('lists', $lists);
     }
     public function show(ToDoList $toDoList)
     {
-        return view('lists.show')->with('list',$toDoList);
+        return view('lists.show')->with('list', $toDoList);
+    }
+    public function create()
+    {
+        return view('lists.create');
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|min:4|max:25',
+            'description' => 'required|string|max:250'
+        ]);
+        $user_id = auth()->user()->id;
+        $data = $request->except(['_token']);
+        $data['user_id'] = $user_id;
+        ToDoList::create($data);
+        return redirect()->route('lists.index');
     }
 }

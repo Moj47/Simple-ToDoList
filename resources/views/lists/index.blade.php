@@ -121,6 +121,6 @@
 
         </ul>
 
-        <button class="btn btn-blue">Create New List</button>
+        <a href="{{route('lists.create')}}"><button class="btn btn-blue">Create New List</button></a>
     </div>
 @endsection

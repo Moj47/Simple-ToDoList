@@ -12,6 +12,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('list/{toDoList}',[ListController::class,'show'])->name('lists.show');
     Route::get('create-list',[ListController::class,'create'])->name('lists.create');
     Route::post('lists',[ListController::class,'store'])->name('lists.store');
+    Route::delete('list/{toDoList}',[ListController::class,'delete'])->name('lists.destroy');
 });
 
 Auth::routes();

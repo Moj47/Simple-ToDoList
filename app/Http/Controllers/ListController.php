@@ -33,4 +33,9 @@ class ListController extends Controller
         ToDoList::create($data);
         return redirect()->route('lists.index');
     }
+    public function delete(ToDoList $toDoList)
+    {
+        $toDoList->delete();
+        return back();
+    }
 }

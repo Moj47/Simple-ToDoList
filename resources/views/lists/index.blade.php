@@ -104,23 +104,28 @@
 @endpush
 
 @section('content')
-    <div class="container">
-        <div class="header">
-            <h2>My Lists</h2>
-        </div>
-
-        <ul id="list-index" class="list-group">
-            @foreach ($lists as $list)
-                <li class="list-group-item">
-                    <a href="{{ route('lists.show', $list) }}">
-                        <h4>{{ $list->name }}</h4>
-                        <p>{{ $list->description }}</p>
-                    </a>
-                </li>
-            @endforeach
-
-        </ul>
-
-        <a href="{{route('lists.create')}}"><button class="btn btn-blue">Create New List</button></a>
+<div class="container">
+    <div class="header">
+        <h2>My Lists</h2>
     </div>
+
+    <ul id="list-index" class="list-group">
+        @foreach ($lists as $list)
+            <li class="list-group-item">
+                <a href="{{ route('lists.show', $list) }}">
+                    <h4>{{ $list->name }}</h4>
+                    <p>{{ $list->description }}</p>
+                </a>
+                <form action="{{ route('lists.destroy', $list) }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button style="margin-left: 95%" class="btn btn-danger">Delete</button>
+                </form>
+            </li>
+        @endforeach
+
+    </ul>
+
+    <a href="{{route('lists.create')}}"><button class="btn btn-blue">Create New List</button></a>
+</div>
 @endsection

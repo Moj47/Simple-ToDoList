@@ -15,6 +15,7 @@ class ListController extends Controller
     }
     public function show(ToDoList $toDoList)
     {
+        $this->authorize('show-list',arguments: $toDoList);
         return view('lists.show')->with('list', $toDoList);
     }
     public function create()
@@ -35,7 +36,7 @@ class ListController extends Controller
     }
     public function delete(ToDoList $toDoList)
     {
-        $this->authorize('delete-list',$toDoList);
+        $this->authorize('delete-list',arguments: $toDoList);
 
         $toDoList->delete();
         return back();

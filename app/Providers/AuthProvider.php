@@ -27,7 +27,7 @@ class AuthProvider extends ServiceProvider
             return $user->id==$list->user_id;
         });
         Gate::define('show-list',function(User $user,ToDoList $list){
-            $user->id==$list->user_id;
+            return $user->id==$list->user_id;
         });
         Gate::define('delete-task',function(User $user,Task $task){
             return $user->id==$task->user_id;

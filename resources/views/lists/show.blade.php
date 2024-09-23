@@ -126,7 +126,7 @@
         </div>
 
         <ul id="myUL" class="list-group">
-            @foreach ($list->task as $task)
+            @foreach ($list->tasks as $task)
                 <li class="list-group-item">
                     @can('update-task',$task)
 

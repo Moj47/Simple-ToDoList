@@ -17,11 +17,8 @@ class DatabaseSeeder extends Seeder
         $users=User::factory(10)->create();
         foreach($users as $user)
         {
-            for ($i=1; $i < rand(1,3) ; $i++)
-            {
-                $list=ToDoList::factory()->hasTasks(rand(1,max: 5),['user_id' => $user->id,]
-                )->create(['user_id'=>$user->id]);
-            }
+            ToDoList::factory(rand(1,5))->hasTasks(rand(1,5),['user_id'=>$user->id])
+            ->create(['user_id'=>$user->id]);
         }
 
     }

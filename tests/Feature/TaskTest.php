@@ -20,46 +20,70 @@ class TaskTest extends TestCase
     use RefreshDatabase;
     public function testSeeTaskInShowPage()
     {
-        $seeder=new DatabaseSeeder();
+        $seeder = new DatabaseSeeder();
         $seeder->run();
         $user = User::inRandomOrder()->first();
-        $list=$user->toDoLists()->inRandomOrder()->first();
-        $tasks=$list->tasks();
+        $list = $user->toDoLists()->inRandomOrder()->first();
+        $tasks = $list->tasks();
         $this->actingAs($user)->get(route('lists.show', ['toDoList' => $list->id]))
-        ->assertSuccessful()
-        ->assertViewHas('list.tasks')
-        ->assertViewHasAll(['list.tasks', 'list.name']);
-
+            ->assertSuccessful()
+            ->assertViewHas('list.tasks')
+            ->assertViewHasAll(['list.tasks', 'list.name']);
     }
     public function testMakeATaskWithStoreMethod()
     {
-        $user=User::factory()->create();
-        $list=ToDoList::factory()->create(['user_id'=>$user->id]);
-        $task=Task::factory()->make([
-            'user_id'=>$user->id
+        $user = User::factory()->create();
+        $list = ToDoList::factory()->create(['user_id' => $user->id]);
+        $task = Task::factory()->make([
+            'user_id' => $user->id
         ]);
         unset($task->to_do_list_id);
-        $data=array_merge($task->toArray(),['list_id'=>$list->id]);
+        $data = array_merge($task->toArray(), ['list_id' => $list->id]);
         // dd(is_string($data['description']));
         $this->actingAs($user)
-        ->post(route('tasks.store',$data))
-        ->assertRedirect();
+            ->post(route('tasks.store', $data))
+            ->assertRedirect();
 
-        $this->assertDatabaseHas('tasks',[
-            'title' => $data['title'],]);
+        $this->assertDatabaseHas('tasks', [
+            'title' => $data['title']
+        ]);
     }
-    // public function testUpdateTaskWithUpdateMethod()
-    // {
-    //     $user=User::factory()->create();
-    //     $list=ToDoList::factory()->create(['user_id'=>$user->id]);
-    //     $task=Task::factory()->create([
-    //         'user_id'=>$user->id,
-    //         'to_do_list_id'=>$list->id
-    //     ]);
-    //     $this->actingAs($user)
-    //     ->post(route('tasks.store',$task->toArray()))
-    //     ->assertRedirect();
+    public function testUpdateTaskWithUpdateMethod()
+    {
+        $user = User::factory()->create();
+        $list = ToDoList::factory()->create(['user_id' => $user->id]);
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'to_do_list_id' => $list->id
+        ]);
+        //check task is false
+        $check = Task::where('user_id', $user->id)->first()->check;
+        $this->assertEquals($check, 0);
+        $this->actingAs($user)
+            ->put(route('tasks.update', $task))
+            ->assertRedirect();
+        //Now check task is true
+        $check = Task::where('user_id', $user->id)->first()->check;
+        $this->assertEquals($check, 1);
 
-    //     $this->assertDatabaseHas('tasks',$task->toArray());
-    // }
+    }
+    public function testDeleteAtaskWithDestroyMethod()
+    {
+        $user = User::factory()->create();
+        $list = ToDoList::factory()->create(['user_id' => $user->id]);
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'to_do_list_id' => $list->id
+        ]);
+        $this->assertDatabaseHas('tasks', [
+            'title' => $task['title']
+        ]);
+        $this->actingAs($user)
+            ->delete(route('tasks.destroy', $task ))
+            ->assertRedirect();
+        $this->assertDatabaseMissing('tasks',[
+            'title'=>$task['title']
+        ]);
+
+    }
 }
